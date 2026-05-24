@@ -4,6 +4,7 @@ import { View, ScrollView, StyleSheet, Text, TouchableOpacity, TextInput, Keyboa
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSequence, withDelay } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Path } from 'react-native-svg';
 
 import { useWorkoutStore } from '@/store/workoutStore';
@@ -116,6 +117,7 @@ export function WorkoutScreen() {
   const goToExercise = useWorkoutStore((s) => s.goToExercise);
   const tickTimer = useWorkoutStore((s) => s.tickTimer);
 
+  const insets = useSafeAreaInsets();
   const unit = useUnitStore((s) => s.unit);
   const KG_TO_LB = 2.20462;
 
@@ -488,7 +490,7 @@ export function WorkoutScreen() {
         </View>
       </ScrollView>
       {/* Full-screen rest overlay */}
-      <Animated.View style={[styles.restOverlay, restOverlayStyle]} pointerEvents={phase === 'rest' ? 'auto' : 'none'}>
+      <Animated.View style={[styles.restOverlay, restOverlayStyle, { paddingTop: insets.top + 24, paddingBottom: insets.bottom + 16 }]} pointerEvents={phase === 'rest' ? 'auto' : 'none'}>
         <View style={styles.restTop}>
           <Text style={styles.restEyebrow}>● REST</Text>
           <Text style={styles.restCountdown}>{formatRestTime(restRemaining)}</Text>
@@ -861,8 +863,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     backgroundColor: colors.ink,
     paddingHorizontal: 28,
-    paddingTop: 60,
-    paddingBottom: 40,
     justifyContent: 'space-between',
   },
   restTop: {

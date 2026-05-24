@@ -3,7 +3,7 @@ import {
   View, Text, FlatList, TextInput, TouchableOpacity,
   ScrollView, KeyboardAvoidingView, Platform, StyleSheet,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import Svg, { Path } from 'react-native-svg';
 import { EXERCISES } from '@/data/exercises';
@@ -51,6 +51,7 @@ function Stepper({
 
 export default function BuilderScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const startWorkout = useWorkoutStore((s) => s.startWorkout);
 
   const [phase, setPhase] = useState<Phase>('select');
@@ -263,7 +264,7 @@ export default function BuilderScreen() {
           })}
         </ScrollView>
 
-        <View style={st.startWrap}>
+        <View style={[st.startWrap, { paddingBottom: insets.bottom + 16 }]}>
           <TouchableOpacity style={st.startBtn} onPress={handleStart} activeOpacity={0.8}>
             <Text style={st.startBtnLabel}>▶ Start Workout</Text>
           </TouchableOpacity>
@@ -628,7 +629,8 @@ const st = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    padding: 16,
+    paddingTop: 16,
+    paddingHorizontal: 16,
     backgroundColor: colors.bg,
     borderTopWidth: border.heavy,
     borderTopColor: colors.ink,
